@@ -9,6 +9,8 @@ var targetGeneTree = function () {
     var id;
     var width = 600;
 
+    var dispatch = d3.dispatch ("load");
+
     var proxy = "";
 
     // var species = [
@@ -77,6 +79,9 @@ var targetGeneTree = function () {
         var tree_vis = tnt_tree();
         tree_vis
             .on("click", tooltips.node)
+            .on("load", function () {
+                dispatch.load();
+            })
             .layout(tnt_tree.layout.vertical()
                 .width(width)
                 .scale(true)
@@ -185,6 +190,10 @@ var targetGeneTree = function () {
         return this;
     };
 
+    render.scientific2common = function (sc) {
+        return legend.scientific2common(sc);
+    };
+
     function pruneTree (root, species, homologiesInfo) {
         var leaves = root.get_all_leaves();
         var retainedLeaves = leaves.filter(function (node) {
@@ -234,6 +243,6 @@ var targetGeneTree = function () {
         });
     }
 
-    return render;
+    return d3.rebind(render, dispatch, "on");
 };
 module.exports = exports = targetGeneTree;

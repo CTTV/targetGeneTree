@@ -158,6 +158,10 @@ var legend = function () {
         return selected;
     };
 
+    l.scientific2common = function (name) {
+        return scientific2common[name];
+    };
+
     return l;
 };
 module.exports = exports = legend;
