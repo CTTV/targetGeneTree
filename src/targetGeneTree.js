@@ -1,4 +1,5 @@
 var speciesIcons = require("cttv.speciesIcons");
+var spinner = require("cttv.spinner");
 var ensemblRestApi = require("tnt.ensembl");
 var tnt_tree = require("tnt.tree");
 var tree_tooltips = require("./tooltips.js");
@@ -7,10 +8,11 @@ var RSVP = require('rsvp');
 
 var targetGeneTree = function () {
     "use strict";
+
     var id;
     var width = 600;
 
-    var dispatch = d3.dispatch ("load");
+    var dispatch = d3.dispatch ("load", "notFound");
 
     var proxy = "";
 
@@ -137,8 +139,19 @@ var targetGeneTree = function () {
         });
         var genetreePromise = rest.call(genetreeUrl);
 
+        // Show the spinner
+        var spinnerDiv = document.createElement("div");
+        var sp = spinner()
+            .size(30)
+            .stroke(3);
+        sp(spinnerDiv);
+        div.appendChild(spinnerDiv);
+
         RSVP.all([homologsPromise, genetreePromise])
             .then (function (resps) {
+                // Remove the spinner
+                div.removeChild(spinnerDiv);
+
                 // Homologues Data
                 var homologues = resps[0].body.data[0].homologies;
                 var homologuesInfo = parseHomologues(homologues);
@@ -178,6 +191,9 @@ var targetGeneTree = function () {
                 legend(treeDiv.node());
             });
         RSVP.on("error", function (reason) {
+            dispatch.notFound();
+            // Remove the icon
+            div.removeChild(spinnerDiv);
             console.warn (reason);
         });
     };
