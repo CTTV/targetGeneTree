@@ -13,12 +13,28 @@ var legend = function () {
         "Oryctolagus_cuniculus" : true, // Rabbit
         "Rattus_norvegicus" : true, // Rat
         "Sus_scrofa" : true, // Pig
-        "Xenopus_tropicalis" : false, // Frog
-        "Danio_rerio" : false, // Zebrafish
-        "Pan_troglodytes": false, // Chimp
-        "Drosophila_melanogaster": false, // Fly
-        "Caenorhabditis_elegans": false // Worm
+        "Xenopus_tropicalis" : true, // Frog
+        "Danio_rerio" : true, // Zebrafish
+        "Pan_troglodytes": true, // Chimp
+        "Drosophila_melanogaster": true, // Fly
+        "Caenorhabditis_elegans": true // Worm
     };
+
+    var speciesSort = [
+        "Homo_sapiens",
+        "Pan_troglodytes",
+        "Macaca_mulatta",
+        "Mus_musculus",
+        "Rattus_norvegicus",
+        "Oryctolagus_cuniculus",
+        "Cavia_porcellus",
+        "Canis_lupus_familiaris",
+        "Sus_scrofa",
+        "Xenopus_tropicalis",
+        "Danio_rerio",
+        "Drosophila_melanogaster",
+        "Caenorhabditis_elegans"
+    ];
 
     var scientific2common = {
         "Homo_sapiens" : "Human",
@@ -55,11 +71,12 @@ var legend = function () {
     var currSpecies = Object.keys(species);
 
     var speciesArr = [];
-    for (var sp in species) {
+    for (var i=0; i<speciesSort.length; i++) {
+        var sp = speciesSort[i];
         if (species.hasOwnProperty(sp)) {
             speciesArr.push({
-                "name" : sp,
-                "checked" : species[sp]
+                "name": sp,
+                "checked": species[sp]
             });
         }
     }
@@ -124,7 +141,7 @@ var legend = function () {
                 update(currentSps);
             })
             .each (function (d) {
-                if (d.checked) {
+                if (d.checked && currSpecies[d.name]) {
                     d3.select(this)
                         .attr("checked", true);
                 }
