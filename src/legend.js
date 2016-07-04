@@ -1,3 +1,5 @@
+var speciesIcons = require("cttv.speciesIcons");
+
 var legend = function () {
 
     var update = function () {};
@@ -12,7 +14,10 @@ var legend = function () {
         "Rattus_norvegicus" : true, // Rat
         "Sus_scrofa" : true, // Pig
         "Xenopus_tropicalis" : false, // Frog
-        "Danio_rerio" : false // Zebrafish
+        "Danio_rerio" : false, // Zebrafish
+        "Pan_troglodytes": false, // Chimp
+        "Drosophila_melanogaster": false, // Fly
+        "Caenorhabditis_elegans": false // Worm
     };
 
     var scientific2common = {
@@ -25,7 +30,10 @@ var legend = function () {
         "Rattus_norvegicus" : "Rat",
         "Sus_scrofa" : "Pig",
         "Xenopus_tropicalis" : "Frog",
-        "Danio_rerio" : "Zebrafish"
+        "Danio_rerio" : "Zebrafish",
+        "Drosophila_melanogaster": "Fly",
+        "Caenorhabditis_elegans": "Worm",
+        "Pan_troglodytes": "Chimpanzee"
     };
 
     var speciesTaxonIds = {
@@ -38,9 +46,13 @@ var legend = function () {
         "Rattus_norvegicus" : 10116,
         "Sus_scrofa" : 9823,
         "Xenopus_tropicalis" : 8364,
-        "Danio_rerio" : 7955
+        "Danio_rerio" : 7955,
+        "Drosophila_melanogaster": 7227,
+        "Caenorhabditis_elegans": 6239,
+        "Pan_troglodytes": 9598
     };
 
+    var currSpecies = Object.keys(species);
 
     var speciesArr = [];
     for (var sp in species) {
@@ -62,7 +74,7 @@ var legend = function () {
                     div
                         .transition()
                         .duration(1000)
-                        .style("height", "350px");
+                        .style("height", "500px");
                 } else {
                     div
                         .transition()
@@ -80,7 +92,6 @@ var legend = function () {
             .append("div")
             .attr("class", "cttv_targetTree_legend");
 
-
         var checkbox = div.selectAll("input")
             .data(speciesArr)
             .enter()
@@ -94,6 +105,7 @@ var legend = function () {
             .attr("value", function (d) {
                 return d.name;
             })
+            .style("margin-top", "15px")
             .on("change", function () {
                 species[this.value] = this.checked;
                 var currentSps = [];
@@ -116,24 +128,48 @@ var legend = function () {
                     d3.select(this)
                         .attr("checked", true);
                 }
+                if (!currSpecies[d.name]) {
+                    d3.select(this).attr("disabled", true);
+                }
             });
 
+        var icons = speciesIcons()
+            .size(30);
+
         checkbox
-            .append("img")
-            .style({
-                "width" : "30px",
-                "height" : "30px",
-                "margin-left" : "10px",
-                "margin-top" : "5px"
-            })
-            .attr("src", function (d) {
-                return "/imgs/species/" + d.name + ".png";
+            .each(function (d) {
+                var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                var g = d3.select(svg)
+                    .attr("width", 32)
+                    .attr("height", 32)
+                    .style({
+                        "margin-left": "10px",
+                        "vertical-align": "middle"
+                    })
+                    .append("g")
+                    .node();
+                var spName = scientific2common[d.name];
+                spName = spName.charAt(0).toLowerCase() + spName.slice(1);
+                icons.species(spName);
+                if (!currSpecies[d.name]) {
+                    icons.color("#BDBDBD"); // gray
+                } else {
+                    icons.color("#377bb5");
+                }
+                icons(g);
+                this.appendChild(svg);
             });
 
         checkbox
             .append("text")
             .style({
                 "margin-left" : "10px"
+            })
+            .style("color", function (d) {
+                if (currSpecies[d.name]) {
+                    return "#377bb5";
+                }
+                return "#BDBDBD";
             })
             .text(function (d) {
                 return scientific2common[d.name];
@@ -148,6 +184,14 @@ var legend = function () {
         return this;
     };
 
+    l.currSpecies = function (sps) {
+        if (!arguments.length) {
+            return currSpecies;
+        }
+        currSpecies = sps;
+        return this;
+    };
+
     l.selectedSpecies = function () {
         var selected = [];
         for (var sp in species) {
@@ -156,6 +200,10 @@ var legend = function () {
             }
         }
         return selected;
+    };
+
+    l.allSpecies = function () {
+        return Object.keys(species);
     };
 
     l.scientific2common = function (name) {

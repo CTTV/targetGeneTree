@@ -1,3 +1,4 @@
+var speciesIcons = require("cttv.speciesIcons");
 var ensemblRestApi = require("tnt.ensembl");
 var tnt_tree = require("tnt.tree");
 var tree_tooltips = require("./tooltips.js");
@@ -13,20 +14,6 @@ var targetGeneTree = function () {
 
     var proxy = "";
 
-    // var species = [
-    //     9606, // human
-    //     10090, // mouse
-    //     9823, // pig
-    //     9615, // dog
-    //     9544, // macaque
-    //     // 9541, // crab-eating macaque --- NOT IN ENSEMBL
-    //     10116, // rat
-    //     10141, // guinea pig
-    //     9986, // rabbit
-    //     8364, // frog
-    //     7955, // zebrafish
-    // ];
-
     var colorScale = d3.scale.linear()
         .domain([0,100])
         .range(["#CBDCEA", "#005299"]);
@@ -36,21 +23,45 @@ var targetGeneTree = function () {
     var species = legend.selectedSpecies();
 
     var render = function (div) {
+        var size = 30;
 
-        var labelPic = tnt_tree.label.img()
-            .src (function (node) {
+        var icon = speciesIcons()
+            .color("#377bb5")
+            .size(size);
+
+        var labelPic = tnt_tree.label.svg()
+            .width(function () {
+                return size;
+            })
+            .height(function () {
+                return size;
+            })
+            .element(function (node) {
+                var data = node.data();
+                var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
                 if (node.is_leaf()) {
-                    var data = node.data();
-                    var spName = data.taxonomy.scientific_name.replace(/ /g, "_");
-                    return "/imgs/species/" + spName + ".png";
+                    var spName = legend.scientific2common(data.taxonomy.scientific_name.replace(/ /g, "_"));
+                    spName = spName.charAt(0).toLowerCase() + spName.slice(1);
+                    icon.species(spName);
+                    icon(g);
                 }
-            })
-            .width(function (d) {
-                return 30;
-            })
-            .height(function (d) {
-                return 30;
+                return d3.select(g);
             });
+
+        // var labelPic = tnt_tree.label.img()
+        //     .src (function (node) {
+        //         if (node.is_leaf()) {
+        //             var data = node.data();
+        //             var spName = data.taxonomy.scientific_name.replace(/ /g, "_");
+        //             return "/imgs/species/Homo_sapiens.png";
+        //         }
+        //     })
+        //     .width(function (d) {
+        //         return 30;
+        //     })
+        //     .height(function (d) {
+        //         return 30;
+        //     });
 
 
         var labelText = tnt_tree.label.text()
@@ -118,19 +129,13 @@ var targetGeneTree = function () {
             "format": "full"
         });
         var homologsPromise = rest.call(homologsUrl);
-            // .catch(function (err) {
-            //     console.warn (err);
-            // });
 
         var genetreeUrl = rest.url.gene_tree({
             "member_id" : id,
             "sequence" : "none",
-            "species": ["human"]
+            "species": legend.allSpecies()
         });
         var genetreePromise = rest.call(genetreeUrl);
-            // .catch(function (err) {
-            //     console.warn (err);
-            // });
 
         RSVP.all([homologsPromise, genetreePromise])
             .then (function (resps) {
@@ -147,12 +152,23 @@ var targetGeneTree = function () {
                 tree_vis.data(subtree.data());
                 tree_vis(div);
 
-                d3.select(div).style("min-height", "400px");
+                // Get the current list of species in the tree
+                var currSpecies = {};
+                root.apply(function (node) {
+                    if (node.is_leaf()) {
+                        var thisSp = node.data().taxonomy.scientific_name;
+                        thisSp = thisSp.replace(/ /g, "_");
+                        currSpecies[thisSp] = 1;
+                    }
+                });
+
+                d3.select(div).style("min-height", "550px");
 
                 var treeDiv = d3.select(div).select("div");
 
                 // Update the tree when the species are selected / deselected
                 legend
+                    .currSpecies(currSpecies)
                     .update(function (species) {
                         var subtree = pruneTree(root, species, homologuesInfo);
                         tree_vis.data(subtree.data());

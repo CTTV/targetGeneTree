@@ -36,10 +36,11 @@
     "mocha": "^2.3.4"
   },
   "dependencies": {
+    "cttv.speciesIcons": "0.0.1",
     "rsvp": "^3.0.18",
-    "tnt.ensembl": "0.0.10",
+    "tnt.ensembl": "0.0.13",
     "tnt.tooltip": "0.0.10",
-    "tnt.tree": "0.1.5",
-    "tnt.utils": "^0.1.2"
+    "tnt.tree": "0.1.6",
+    "tnt.utils": "^0.1.3"
   }
 }

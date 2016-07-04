@@ -14,7 +14,10 @@ var tooltips = function () {
         10141 : "Guinea Pig",
         9986 : "Rabbit",
         8364 : "Frog",
-        7955 : "Zebrafish"
+        7955 : "Zebrafish",
+        7227 : "Fly",
+        6239 : "Worm",
+        9598 : "Chimpanzee"
     };
 
     var homologyType = {
@@ -30,8 +33,6 @@ var tooltips = function () {
         var data = node.data();
         var obj = {};
         obj.rows = [];
-        console.warn ("NODE");
-        console.log(data);
         if (node.is_leaf()) {
             obj.header = data.sequence.name || data.id.accession;
             obj.rows.push({
