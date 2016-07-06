@@ -175,7 +175,7 @@ var targetGeneTree = function () {
                     }
                 });
 
-                d3.select(div).style("min-height", "550px");
+                d3.select(div).style("min-height", "600px");
 
                 var treeDiv = d3.select(div).select("div");
 

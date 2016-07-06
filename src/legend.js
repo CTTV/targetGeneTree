@@ -91,7 +91,7 @@ var legend = function () {
                     div
                         .transition()
                         .duration(1000)
-                        .style("height", "500px");
+                        .style("height", "550px");
                 } else {
                     div
                         .transition()
