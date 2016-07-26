@@ -40,7 +40,7 @@
     "rsvp": "^3.0.18",
     "tnt.ensembl": "0.0.13",
     "tnt.tooltip": "0.0.10",
-    "tnt.tree": "0.1.6",
+    "tnt.tree": "0.1.7",
     "tnt.utils": "^0.1.3"
   }
 }
