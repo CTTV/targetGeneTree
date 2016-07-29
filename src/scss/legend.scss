@@ -26,6 +26,7 @@ $dim: 30px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    cursor: pointer;
 }
 
 .hamburger-menu {
@@ -39,7 +40,6 @@ $dim: 30px;
     position:absolute;
     left: $pos-left + 3px;
     top: 16px;
-
 }
 
 .hamburger-menu:after, .hamburger-menu:before {
