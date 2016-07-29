@@ -1,6 +1,6 @@
 {
   "name": "cttv.targetGeneTree",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Gene tree visualization of a cttv target",
   "main": "index.js",
   "directories": {
