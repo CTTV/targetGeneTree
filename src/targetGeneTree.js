@@ -90,6 +90,8 @@ var targetGeneTree = function () {
             .add_label (labelText);
 
         var tree_vis = tnt_tree();
+        var defaultScale = false;
+        legend.scale(defaultScale);
         tree_vis
             .on("click", tooltips.node)
             .on("load", function () {
@@ -97,7 +99,7 @@ var targetGeneTree = function () {
             })
             .layout(tnt_tree.layout.vertical()
                 .width(width)
-                .scale(true)
+                .scale(defaultScale)
             )
             .node_display(tree_vis.node_display()
                 .fill(function (node) {
@@ -182,9 +184,10 @@ var targetGeneTree = function () {
                 // Update the tree when the species are selected / deselected
                 legend
                     .currSpecies(currSpecies)
-                    .update(function (species) {
+                    .update(function (species, scale) {
                         var subtree = pruneTree(root, species, homologuesInfo);
                         tree_vis.data(subtree.data());
+                        tree_vis.layout().scale(scale);
                         tree_vis.update();
                     });
 

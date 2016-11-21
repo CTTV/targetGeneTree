@@ -69,6 +69,7 @@ var legend = function () {
     };
 
     var currSpecies = Object.keys(species);
+    var currScale = false;
 
     var speciesArr = [];
     for (var i=0; i<speciesSort.length; i++) {
@@ -109,6 +110,43 @@ var legend = function () {
             .append("div")
             .attr("class", "cttv_targetTree_legend");
 
+        var scaleBranches = div.append("div");
+        scaleBranches
+            .append("h6")
+            .style("font-size", "14px")
+            .text("Tree branches");
+
+        var branchesSpan = scaleBranches
+            .append("span");
+        branchesSpan
+            .append("input")
+            .attr("type", "checkbox")
+            .attr("name", "sclcheck")
+            .attr("value", "scale branches")
+            .on("change", function () {
+                currScale = this.checked;
+                var currentSps = getCurrentSps();
+                update(currentSps, currScale);
+            })
+            .each(function () {
+                if (currScale) {
+                d3.select(this)
+                    .attr("checked", currScale)
+                }
+            });
+
+        branchesSpan
+            .append("text")
+            .style('margin-left', "15px")
+            .text("scale branches");
+
+        div.append("h6")
+            .style({
+                "font-size": "14px",
+                "margin-top": "30px"
+            })
+            .text("Species");
+
         var checkbox = div.selectAll("input")
             .data(speciesArr)
             .enter()
@@ -125,20 +163,8 @@ var legend = function () {
             .style("margin-top", "15px")
             .on("change", function () {
                 species[this.value] = this.checked;
-                var currentSps = [];
-                var allSps = [];
-                for (var sp in species) {
-                    if (species.hasOwnProperty(sp)) {
-                        allSps.push(speciesTaxonIds[sp]);
-                        if (species[sp]) {
-                            currentSps.push(speciesTaxonIds[sp]);
-                        }
-                    }
-                }
-                if (!currentSps.length) {
-                    currentSps = allSps;
-                }
-                update(currentSps);
+                var currentSps = getCurrentSps();
+                update(currentSps, currScale);
             })
             .each (function (d) {
                 if (d.checked && currSpecies[d.name]) {
@@ -191,6 +217,25 @@ var legend = function () {
             .text(function (d) {
                 return scientific2common[d.name];
             });
+
+
+        function getCurrentSps() {
+            var currentSps = [];
+            var allSps = [];
+            for (var sp in species) {
+                if (species.hasOwnProperty(sp)) {
+                    allSps.push(speciesTaxonIds[sp]);
+                    if (species[sp]) {
+                        currentSps.push(speciesTaxonIds[sp]);
+                    }
+                }
+            }
+            if (!currentSps.length) {
+                currentSps = allSps;
+            }
+            return currentSps;
+        }
+
     };
 
     l.update = function (cbak) {
@@ -198,6 +243,14 @@ var legend = function () {
             return update;
         }
         update = cbak;
+        return this;
+    };
+
+    l.scale = function (sc) {
+        if (!arguments.length) {
+            return currScale;
+        }
+        currScale = sc;
         return this;
     };
 
