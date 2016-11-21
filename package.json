@@ -39,7 +39,7 @@
     "cttv.speciesIcons": "0.0.1",
     "rsvp": "^3.0.18",
     "tnt.ensembl": "0.0.13",
-    "tnt.tooltip": "0.0.10",
+    "tnt.tooltip": "0.2.0",
     "tnt.tree": "0.1.7",
     "tnt.utils": "^0.1.3"
   }
