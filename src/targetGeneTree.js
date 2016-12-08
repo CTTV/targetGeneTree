@@ -26,6 +26,7 @@ var targetGeneTree = function () {
 
     var render = function (div) {
         var size = 30;
+        var size = 30;
 
         var icon = speciesIcons()
             .color("#377bb5")

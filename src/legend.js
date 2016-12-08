@@ -24,7 +24,7 @@ var legend = function () {
         "Homo_sapiens",
         "Pan_troglodytes",
         "Macaca_mulatta",
-        "Mus_musculus",
+        "Mus_musculus_reference",
         "Rattus_norvegicus",
         "Oryctolagus_cuniculus",
         "Cavia_porcellus",
@@ -38,7 +38,8 @@ var legend = function () {
 
     var scientific2common = {
         "Homo_sapiens" : "Human",
-        "Mus_musculus" : "Mouse",
+        "Mus_musculus_reference" : "Mouse",
+        "Mus_musculus": "Mouse",
         "Cavia_porcellus" : "Guinea pig",
         "Macaca_mulatta" : "Macaque",
         "Canis_lupus_familiaris" : "Dog",
