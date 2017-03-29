@@ -26,7 +26,6 @@ var targetGeneTree = function () {
 
     var render = function (div) {
         var size = 30;
-        var size = 30;
 
         var icon = speciesIcons()
             .color("#377bb5")
@@ -43,7 +42,7 @@ var targetGeneTree = function () {
                 var data = node.data();
                 var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
                 if (node.is_leaf()) {
-                    var spName = legend.scientific2common(data.taxonomy.scientific_name.replace(/ /g, "_"));
+                    var spName = legend.scientific2common(legend.complexScientific2scientific(data.taxonomy.scientific_name).replace(/ /g, "_"));
                     spName = spName.charAt(0).toLowerCase() + spName.slice(1);
                     icon.species(spName);
                     icon(g);
@@ -152,6 +151,7 @@ var targetGeneTree = function () {
 
         RSVP.all([homologsPromise, genetreePromise])
             .then (function (resps) {
+
                 // Remove the spinner
                 div.removeChild(spinnerDiv);
 
@@ -172,7 +172,7 @@ var targetGeneTree = function () {
                 var currSpecies = {};
                 root.apply(function (node) {
                     if (node.is_leaf()) {
-                        var thisSp = node.data().taxonomy.scientific_name;
+                        var thisSp = legend.complexScientific2scientific(node.data().taxonomy.scientific_name);
                         thisSp = thisSp.replace(/ /g, "_");
                         currSpecies[thisSp] = 1;
                     }
@@ -196,9 +196,9 @@ var targetGeneTree = function () {
             });
         RSVP.on("error", function (reason) {
             dispatch.notFound();
+            console.warn(reason);
             // Remove the icon
             div.removeChild(spinnerDiv);
-            console.warn (reason);
         });
     };
 

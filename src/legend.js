@@ -24,7 +24,7 @@ var legend = function () {
         "Homo_sapiens",
         "Pan_troglodytes",
         "Macaca_mulatta",
-        "Mus_musculus_reference",
+        "Mus_musculus",
         "Rattus_norvegicus",
         "Oryctolagus_cuniculus",
         "Cavia_porcellus",
@@ -50,7 +50,29 @@ var legend = function () {
         "Danio_rerio" : "Zebrafish",
         "Drosophila_melanogaster": "Fly",
         "Caenorhabditis_elegans": "Worm",
-        "Pan_troglodytes": "Chimpanzee"
+        "Pan_troglodytes": "Chimpanzee",
+        "Mus_musculus_reference_(CL57BL6)": "Mouse",
+        "Caenorhabditis_elegans_N2": "Worm"
+    };
+
+    var complexScientific2scientific = {
+        "Homo sapiens": "Homo sapiens",
+        "Mus musculus": "Mus musculus",
+        "Mus musculus reference": "Mus musculus",
+        "Mus musculus reference (CL57BL6)": "Mus musculus",
+        "Cavia porcellus": "Cavia porcellus",
+        "Macaca mulatta": "Macaca mulatta",
+        "Canis lupus": "Canis lupus familiaris",
+        "Canis lupus familiaris": "Canis lupus familiaris",
+        "Oryctolagus cuniculus": "Oryctolagus cuniculus",
+        "Rattus norvegicus": "Rattus norvegicus",
+        "Sus scrofa": "Sus scrofa",
+        "Xenopus tropicalis": "Xenopus tropicalis",
+        "Danio rerio": "Danio rerio",
+        "Drosophila melanogaster": "Drosophila melanogaster",
+        "Caenorhabditis elegans": "Caenorhabditis elegans",
+        "Caenorhabditis elegans N2": "Caenorhabditis elegans",
+        "Pan troglodytes": "Pan troglodytes",
     };
 
     var speciesTaxonIds = {
@@ -279,6 +301,10 @@ var legend = function () {
 
     l.scientific2common = function (name) {
         return scientific2common[name];
+    };
+
+    l.complexScientific2scientific = function (name) {
+        return complexScientific2scientific[name];
     };
 
     return l;
