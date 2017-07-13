@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "cttv.speciesIcons": "0.0.1",
+    "cttv.spinner": "0.0.1",
     "rsvp": "^3.0.18",
     "tnt.ensembl": "0.0.13",
     "tnt.tooltip": "0.2.0",
