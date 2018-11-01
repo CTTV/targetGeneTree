@@ -308,6 +308,20 @@ var legend = function () {
         return complexScientific2scientific[name];
     };
 
+    l.id2species = function (id){
+        var s = '';
+        for (var i in speciesTaxonIds) {
+            if (speciesTaxonIds[i] === id) {
+                s = i;
+            }
+        }
+        return s;
+    }
+    
+    l.species2id = function (species){
+        return speciesTaxonIds[species];
+    }
+    
     return l;
 };
 module.exports = exports = legend;

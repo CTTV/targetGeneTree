@@ -42,7 +42,8 @@ var targetGeneTree = function () {
                 var data = node.data();
                 var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
                 if (node.is_leaf()) {
-                    var spName = legend.scientific2common(legend.complexScientific2scientific(data.taxonomy.scientific_name).replace(/ /g, "_"));
+                    // var spName = legend.scientific2common(legend.complexScientific2scientific(data.taxonomy.scientific_name).replace(/ /g, "_"));
+                    var spName = legend.scientific2common(legend.id2species(data.taxonomy.id));
                     spName = spName.charAt(0).toLowerCase() + spName.slice(1);
                     icon.species(spName);
                     icon(g);
@@ -172,8 +173,9 @@ var targetGeneTree = function () {
                 var currSpecies = {};
                 root.apply(function (node) {
                     if (node.is_leaf()) {
-                        var thisSp = legend.complexScientific2scientific(node.data().taxonomy.scientific_name);
-                        thisSp = thisSp.replace(/ /g, "_");
+                        // var thisSp = legend.complexScientific2scientific(node.data().taxonomy.scientific_name);
+                        // thisSp = thisSp.replace(/ /g, "_");
+                        var thisSp = legend.id2species(node.data().taxonomy.id);
                         currSpecies[thisSp] = 1;
                     }
                 });
