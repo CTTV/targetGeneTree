@@ -60,6 +60,7 @@ var legend = function () {
         "Mus musculus": "Mus musculus",
         "Mus musculus reference": "Mus musculus",
         "Mus musculus reference (CL57BL6)": "Mus musculus",
+        "Mus musculus strain reference (CL57BL6)": "Mus musculus",
         "Cavia porcellus": "Cavia porcellus",
         "Macaca mulatta": "Macaca mulatta",
         "Canis lupus": "Canis lupus familiaris",
